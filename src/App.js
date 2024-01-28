@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { gapi } from 'gapi-script';
 import './App.css';
 
 function App() {
   const clientID = "292060742455-vr86dsqntspb8derafn4kkujsptmmeb1.apps.googleusercontent.com";
-
+  const [user,setUser] = useState({});
   useEffect(() => {
     const start = () => {
       gapi.load('auth2', () => {
@@ -19,7 +19,7 @@ function App() {
   }, []); // Con esto habilitamos los servicios de Google
 
   const onSuccess = (response) => {
-    console.log(response);
+    setUser(response.profileObj)
   };
 
   const onFailure = () => {
@@ -36,6 +36,10 @@ function App() {
           onFailure={onFailure}
           cookiePolicy={"single_host_policy"}
         />
+      </div>
+      <div className={user? "profile":"hidden"}>
+        <img src={user.imageUrl} alt ="" />
+        <h3>{user.name}</h3>
       </div>
     </div>
   );
